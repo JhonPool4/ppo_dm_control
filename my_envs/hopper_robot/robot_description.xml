@@ -1,0 +1,46 @@
+<mujoco>
+    <include file="./my_envs/common/skybox.xml"/>
+    <include file="./my_envs/common/visual.xml"/>
+    <include file="./my_envs/common/materials.xml"/>
+    
+    <option timestep="0.01"/>
+    
+    <visual>
+        <global offwidth="960" offheight="540"/>
+    </visual>
+
+    <default>
+        <default class="free_joint">
+            <joint limited="false" armature="0" stiffness="0" damping="0"/>
+        </default>
+        <default class="real_joint">
+            <joint type="hinge" limited="true" stiffness="0" damping=".1"/>
+        </default>
+        <default class="trunk_geom">
+            <geom type="capsule" mass="10" material="body"/>
+        </default>
+        <default class="pelvis_geom">
+            <geom type="capsule" mass="5" material="body"/>
+        </default>
+        <default class="thigh_geom">
+            <geom type="capsule" mass="10" material="body"/>
+        </default>       
+        <default class="shin_geom">
+            <geom type="capsule" mass="5" material="body"/>
+        </default>        
+        <default class="foot_geom">
+            <geom type="capsule" mass="1" material="body"/>
+        </default>                                  
+
+        <default class="site_com">
+            <site type="sphere" size=".05" material="com"/>
+        </default>
+        <default class="site_joint">
+            <site type="sphere" size=".05" material="joint"/>
+        </default>
+
+        <motor ctrlrange="-1 1" gear="100" ctrllimited="true"/>
+
+    </default>  
+
+</mujoco>
