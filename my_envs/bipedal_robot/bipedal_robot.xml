@@ -1,0 +1,120 @@
+<mujoco>
+    <!--Load custom robot configuration-->
+    <include file="./my_envs/bipedal_robot/robot_description.xml"/>
+
+   
+    <worldbody>
+        <camera name="side" pos="0.0 -4.0 1" euler="90 0 0" mode="trackcom"/>
+        <camera name="back" pos="-4.0 0.0 1" euler="90 -90 0" mode="trackcom"/>
+        
+        <geom name="floor" type="plane" conaffinity="1" pos="0 0 0" size="50 1 .2" material="grid"/>
+        <site name="upper_ref" type="capsule" fromto="0 -0.2 1.5 30 -0.2 1.5"  size=".05" rgba="1 0 0 1"/>
+        <site name="lower_ref" type="capsule" fromto="0 -0.2 0.9 30 -0.2 0.9"  size=".05" rgba="1 0 0 1"/> 
+        <light name="light" pos="0 0 2" mode="targetbodycom" target="walker_robot"/>      
+         
+        <!--bipedal robot-->
+        <body name="walker_robot" pos="0 0 1.8">   
+            <geom name="trunk" fromto="0 0 0.0  0 0 0.4" size="0.1"  class="trunk_geom"/>
+            <site name="trunk_com_site" pos="0 0 0.2" class="site_com"/>
+            <site name="trunk_joint_site" pos="0 0 0.0" class="site_joint"/>  
+            <joint name="root_xtras" type="slide" axis="1 0 0" class="free_joint"/>
+            <joint name="root_ztras" type="slide" axis="0 0 1" class="free_joint"/>
+            <joint name="root_yrot" type="hinge" axis="0 1 0" class="free_joint"/> 
+            <body name="pelvis" pos="-0.05 0 -0.2">
+                <geom name="pelvis" fromto="0 -0.25 0  0 0.25 0" size="0.2" class="pelvis_geom"/>
+                <site name="pelvis_com_site" pos="0 0 0.0" class="site_com"/> 
+                <site name="waist_joint_site" class="site_joint"/> 
+                <joint name="waist" range="-30 30" axis="0 1 0" class="real_joint"/>
+                
+                <body name="l_leg" pos="0.05 -0.25 -0.2">
+                    <geom name="l_thigh" fromto="0 0 -0.5  0 0 0" size="0.14" class="thigh_geom"/>
+                    <joint name="l_hip" range="-170 10" axis="0 1 0" class="real_joint"/>
+                    <site name="l_thigh_com_site" pos="0 0 -0.25" class="site_com"/> 
+                    <site name="l_hip_joint_site" class="site_joint"/>
+                    <body name="l_lower_leg" pos="0 0 -0.65">
+                        <geom name="l_shin"  fromto="0 0 -0.4  0 0 0" size="0.13" class="shin_geom"/>
+                        <joint name="l_knee" range="5 160" axis="0 1 0" class="real_joint"/>
+                        <site name="l_knee_joint_site" class="site_joint"/> 
+                        <site name="l_thin_com_site" pos="0 0 -0.2" class="site_com"/>  
+                        <body name="l_foot" pos="0.0 0.0 -0.55">
+                            <joint name="l_ankle" axis="0 1 0" range="-45 45" class="real_joint"/>  
+                            <site name="l_ankle_joint_site" class="site_joint"/>  
+                            <geom name="l_foot" fromto="-0.1 0.0 0.0  0.3 0.0 0.0" size="0.1" class="foot_geom"/>
+                            <site name="l_foot_com_site" pos="0.2 0.0 0.0" class="site_com"/>
+                            <site name="l_foot_toe_site" type="sphere" size="0.075" pos="0.3 0.0 -0.1" material="site"/>
+                            <site name="l_foot_heel_site" type="sphere" size="0.075" pos="-0.1 0.0 -0.1" material="site"/>                               
+                        </body>     
+                    </body>
+                </body>
+                <body name="r_leg" pos="0.05 0.25 -0.2">
+                    <geom name="r_thigh" fromto="0 0 -0.5  0 0 0" size="0.14" class="thigh_geom"/>
+                    <joint name="r_hip" range="-170 10" axis="0 1 0" class="real_joint"/>
+                    <site name="r_thigh_com_site" pos="0 0 -0.25" class="site_com"/> 
+                    <site name="r_hip_joint_site" class="site_joint"/> 
+                    <body name="r_lower_leg" pos="0 0 -0.65">
+                        <geom name="r_shin"  fromto="0 0 -0.4  0 0 0" size="0.13" class="shin_geom"/>
+                        <joint name="r_knee" range="5 160" axis="0 1 0" class="real_joint"/>
+                        <site name="r_knee_joint_site" class="site_joint"/> 
+                        <site name="r_thin_com_site" pos="0 0 -0.2" class="site_com"/>  
+                        <body name="r_foot" pos="0.0 0.0 -0.55">
+                            <joint name="r_ankle" axis="0 1 0" range="-45 45" class="real_joint"/>  
+                            <site name="r_ankle_joint_site" class="site_joint"/>  
+                            <geom name="r_foot" fromto="-0.1 0.0 0.0  0.3 0.0 0.0" size="0.1" class="foot_geom"/>
+                            <site name="r_foot_com_site" pos="0.2 0.0 0.0" class="site_com"/>
+                            <site name="r_foot_toe_site" type="sphere" size="0.075" pos="0.3 0.0 -0.1" material="site"/>
+                            <site name="r_foot_heel_site" type="sphere" size="0.075" pos="-0.1 0.0 -0.1" material="site"/>                               
+                        </body>     
+                    </body>                
+                </body>                
+            </body>
+        </body>
+    </worldbody>
+    
+    <actuator>
+        <motor name="waist_motor" joint="waist" />
+        <motor name="l_hip_motor" joint="l_hip" />
+        <motor name="l_knee_motor" joint="l_knee"/>
+        <motor name="l_ankle_motor" joint="l_ankle"/>
+        <motor name="r_hip_motor" joint="r_hip" />
+        <motor name="r_knee_motor" joint="r_knee"/>
+        <motor name="r_ankle_motor" joint="r_ankle"/>         
+    </actuator>
+
+
+    <sensor>
+        <!--body COM: pos and linvel-->
+        <subtreecom name="body_com_sensor" body="walker_robot"/>
+        <subtreelinvel name="body_linvel_sensor" body="walker_robot"/>
+        <!--trunk IMU:  linaccel and angaccel-->
+        <!--<accelerometer name="trunk_linaccel_sensor" site="trunk_com_site"/>-->
+        <!--<gyro name="trunk_angaccel_sensor" site="trunk_com_site"/>-->
+        <!--joint states-->
+        <jointpos name="trunk_pos_sensor" joint="root_yrot"/>
+        <jointpos name="waist_pos_sensor" joint="waist"/>
+        <jointpos name="l_hip_pos_sensor" joint="l_hip"/>
+        <jointpos name="r_hip_pos_sensor" joint="r_hip"/>
+        <jointpos name="l_knee_pos_sensor" joint="l_knee"/>
+        <jointpos name="r_knee_pos_sensor" joint="r_knee"/>
+        <jointpos name="l_ankle_pos_sensor" joint="l_ankle"/>
+        <jointpos name="r_ankle_pos_sensor" joint="r_ankle"/>
+
+        <jointvel name="trunk_vel_sensor" joint="root_yrot"/>
+        <jointvel name="waist_vel_sensor" joint="waist"/>
+        <jointvel name="l_hip_vel_sensor" joint="l_hip"/>
+        <jointvel name="r_hip_vel_sensor" joint="r_hip"/>
+        <jointvel name="l_knee_vel_sensor" joint="l_knee"/>
+        <jointvel name="r_knee_vel_sensor" joint="r_knee"/>
+        <jointvel name="l_ankle_vel_sensor" joint="l_ankle"/>
+        <jointvel name="r_ankle_vel_sensor" joint="r_ankle"/>
+
+        <!--left foot: COMpos and force-->
+        <subtreecom name="l_foot_com_sensor" body="l_foot"/>
+        <touch name="l_foot_heel_force_sensor" site="l_foot_heel_site"/>
+        <touch name="l_foot_toe_force_sensor" site="l_foot_toe_site"/>   
+        <!--right foot: COMpos and force-->
+        <subtreecom name="r_foot_com_sensor" body="r_foot"/>
+        <touch name="r_foot_heel_force_sensor" site="r_foot_heel_site"/>
+        <touch name="r_foot_toe_force_sensor" site="r_foot_toe_site"/>                
+    </sensor>
+
+</mujoco>
